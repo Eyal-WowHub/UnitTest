@@ -19,23 +19,47 @@ do
     local TestSuite = {}
     local AssertionApi = {}
 
-    function AssertionApi:Assert(condition)
-        self.__calls = self.__calls + 1
-        assert(condition, "Assertion failed: The test condition should have been true, but it was false.")
+    local function FormattedCallStack()
+        local callstack = debugstack(2, 3, 0)
+        callstack = callstack:gsub("\n", " ")
+        callstack = callstack:gsub("%[.+ \"@(.+)\"%]:(%d+):.+<(.+):(%d+)>.+", "\nat '%1:%2' in '%3:%4'.")
+        return callstack
     end
 
-    function AssertionApi:Capture(func, errorHandler)
+    local function FormattedError(err)
+        local callstack = FormattedCallStack()
+
+        if err then
+            err = err:gsub(".+:%d+:%s*", "")
+
+            return callstack .. "\n" .. ORANGE_FONT_COLOR:WrapTextInColorCode(err)
+        end
+
+        return callstack
+    end
+
+    local function Fail(err)
+        error(ORANGE_FONT_COLOR:WrapTextInColorCode("<Test Failure> ") .. err, 0)
+    end
+
+    function AssertionApi:Assert(condition)
+        self.__calls = self.__calls + 1
+
+        if not condition then
+            Fail("The test condition should have been true, but it was false." .. FormattedCallStack())
+        end
+    end
+
+    function AssertionApi:Capture(func)
         C:IsFunction(func, 2)
 
         self.__calls = self.__calls + 1
 
         local success, err = pcall(func)
 
-        if errorHandler and err then
-            errorHandler(err)
+        if not success then
+            Fail("The function should have thrown an error, but it did not." .. FormattedError(err))
         end
-
-        assert(not success, "Capture failed: The function should have thrown an error, but it did not.")
     end
 
     do
@@ -195,7 +219,7 @@ do
         elseif type == "test" then
             local addonName, moduleName, scopeName, testName, err = ...
             if err then
-                print("            + " .. RED_FONT_COLOR:WrapTextInColorCode(testName)  .. "\n " .. YELLOW_FONT_COLOR:WrapTextInColorCode(err))
+                print("            + " .. RED_FONT_COLOR:WrapTextInColorCode(testName)  .. "\n" .. YELLOW_FONT_COLOR:WrapTextInColorCode(err))
             else
                 print("            + " .. GREEN_FONT_COLOR:WrapTextInColorCode(testName))
             end
