@@ -4,25 +4,43 @@ A library that offers an easy, efficient, and organized way to create, manage, a
 
 To run the tests, create a macro and paste the following script: `/run LibStub("UnitTest-1.0"):Run()`.
 
-### Examples:
+### Example:
 
+1. Calculator
 ```lua
--- DemoTest: Demo.lua
-local T = UnitTest_Table("DemoTests", {
-    DemoFunc = function()
-    end
+-- Math.lua
+local T = UnitTest_Table("Math", {
+    Add = function(a, b)
+        return a + b
+    end,
+    Divide = function(a, b)
+        assert(b ~= 0, "Divided by zero. The denominator cannot be zero.")
+
+        return a / b
+     end
 }, ...)
 
 do
-    local DemoFunc = T:Test("DemoFunc")
+    local Add = T:Test("Add")
 
-    DemoFunc["Should fail first"] = function(self, ref)
-        self:Assert(false)
+    Add["Should return 3"] = function(self, math)
+        self:Assert(math.Add(1, 2) == 3)
+    end
+end
+
+do
+    local Divide = T:Test("Divide")
+
+    Divide["Should throw when divided by zero"] = function(self, math)
+        self:Capture(function()
+            math.Divide(1, 0)
+        end)
     end
 end
 ```
+2. UnitTest
 ```lua
--- UnitTest: Modules.lua
+-- Modules.lua
 local T = UnitTest_Library("UnitTest-1.0", ...)
 
 do
@@ -38,12 +56,17 @@ end
 
 ```
 -----------------------------------------------------------------------------------------------
-+ WowTestsDriver (Modules: 1)
++ Calculator (Modules: 1)
 -----------------------------------------------------------------------------------------------
-    + DemoTest (Scopes: 1)
-       + DemoFunc (Tests: 1)
-          + Should fail first
-    ...ace/AddOns/WowTestsDriver/Libs/UnitTest/UnitTest.lua:24: Assertion failed: The test condition should have been true, but it was false.
+    + Math (Scopes: 2)
+        + Add (Tests: 1)
+            + Should return 3
+        + Divide (Tests: 1)
+            + Should throw when divided by zero
+    <Test Failure> The function should have thrown an error, but it did not.
+    at 'Interface/AddOns/WowTestsDriver/Tests/MathTests.lua:24'
+    in 'Interface/AddOns/WowTestsDriver/Tests/MathTests.lua:23'.
+    Divided by zero. The denominator cannot be zero.
 -----------------------------------------------------------------------------------------------
 + UnitTest (Modules: 1)
 -----------------------------------------------------------------------------------------------
@@ -51,7 +74,7 @@ end
        + Modules (Tests: 1)
           + Create a module
 -----------------------------------------------------------------------------------------------
-Tests: 2 | Addons: 2 | Modules: 2 | Scopes: 2 | Passed: 1 | Failed: 1
+Tests: 3 | Addons: 2 | Modules: 2 | Scopes: 3 | Passed: 2 | Failed: 1
 -----------------------------------------------------------------------------------------------
 ```
 
