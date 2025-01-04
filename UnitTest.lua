@@ -194,7 +194,11 @@ do
             print("        + " .. scopeName .. " (Tests: " .. totalTests .. ")")
         elseif type == "test" then
             local addonName, moduleName, scopeName, testName, err = ...
-            print("            + " .. testName .. ": " .. err)
+            if err then
+                print("            + " .. RED_FONT_COLOR:WrapTextInColorCode(testName)  .. "\n " .. YELLOW_FONT_COLOR:WrapTextInColorCode(err))
+            else
+                print("            + " .. GREEN_FONT_COLOR:WrapTextInColorCode(testName))
+            end
         elseif type == "summary" then
             print("-----------------------------------------------------------------------------------------------")
             local totalTests, totalAddons, totalModules, totalScopes, passedCounter, failedCounter = ...
