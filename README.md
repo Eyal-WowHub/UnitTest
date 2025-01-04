@@ -33,7 +33,7 @@ do
 
     Divide["Should throw when divided by zero"] = function(self, math)
         self:Capture(function()
-            math.Divide(1, 0)
+            math.Divide(1, 1)
         end)
     end
 end
@@ -64,9 +64,8 @@ end
         + Divide (Tests: 1)
             + Should throw when divided by zero
     <Test Failure> The function should have thrown an error, but it did not.
-    at 'Interface/AddOns/WowTestsDriver/Tests/MathTests.lua:24'
-    in 'Interface/AddOns/WowTestsDriver/Tests/MathTests.lua:23'.
-    Divided by zero. The denominator cannot be zero.
+    at 'Interface/AddOns/Calculator/Tests/MathTests.lua:24' 
+    in 'Interface/AddOns/Calculator/Tests/MathTests.lua:23'.
 -----------------------------------------------------------------------------------------------
 + UnitTest (Modules: 1)
 -----------------------------------------------------------------------------------------------
