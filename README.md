@@ -4,10 +4,10 @@ A library that offers an easy, efficient, and organized way to create, manage, a
 
 To run the tests, create a macro and paste the following script: `/run LibStub("UnitTest-1.0"):Run()`.
 
-### Example:
+### Examples:
 
 ```lua
--- DemoTests.lua
+-- DemoTest: Demo.lua
 local T = UnitTest_Table("DemoTests", {
     DemoFunc = function()
     end
@@ -21,6 +21,18 @@ do
     end
 end
 ```
+```lua
+-- UnitTest: Modules.lua
+local T = UnitTest_Library("UnitTest-1.0", ...)
+
+do
+    local Modules = T:Test("Modules")
+
+    Modules["Create a module"] = function(self, ref)
+        self:Assert(Modules ~= nil)
+    end
+end
+```
 
 ### Outputs:
 
@@ -28,10 +40,18 @@ end
 -----------------------------------------------------------------------------------------------
 + WowTestsDriver (Modules: 1)
 -----------------------------------------------------------------------------------------------
-    + DemoTests (Scopes: 1)
+    + DemoTest (Scopes: 1)
        + DemoFunc (Tests: 1)
+          + Should fail first
+    ...ace/AddOns/WowTestsDriver/Libs/UnitTest/UnitTest.lua:24: Assertion failed: The test condition should have been true, but it was false.
 -----------------------------------------------------------------------------------------------
-Tests: 1 | Addons: 1 | Modules: 1 | Scopes: 1 | Passed: 1 | Failed: 0
++ UnitTest (Modules: 1)
+-----------------------------------------------------------------------------------------------
+    + UnitTest-1.0 (Scopes: 1)
+       + Modules (Tests: 1)
+          + Create a module
+-----------------------------------------------------------------------------------------------
+Tests: 2 | Addons: 2 | Modules: 2 | Scopes: 2 | Passed: 1 | Failed: 1
 -----------------------------------------------------------------------------------------------
 ```
 
