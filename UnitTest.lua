@@ -206,9 +206,7 @@ do
     local function ExecuteTest(type, addon, module, scope, test, resultsHandler)
         local success, err = pcall(test.func, test.api, module.ref)
 
-        if not success then
-            resultsHandler(type, addon.name, module.name, scope.name, test.name, err)
-        end
+        resultsHandler(type, addon.name, module.name, scope.name, test.name, err)
 
         return test.api.__calls > 0, success
     end
