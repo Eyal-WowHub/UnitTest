@@ -26,18 +26,6 @@ do
         return callstack
     end
 
-    local function FormattedError(err)
-        local callstack = FormattedCallStack()
-
-        if err then
-            err = err:gsub(".+:%d+:%s*", "")
-
-            return callstack .. "\n" .. ORANGE_FONT_COLOR:WrapTextInColorCode(err)
-        end
-
-        return callstack
-    end
-
     local function Fail(err)
         error(ORANGE_FONT_COLOR:WrapTextInColorCode("<Test Failure> ") .. err, 0)
     end
@@ -55,10 +43,10 @@ do
 
         self.__calls = self.__calls + 1
 
-        local success, err = pcall(func)
+        local success = pcall(func)
 
-        if not success then
-            Fail("The function should have thrown an error, but it did not." .. FormattedError(err))
+        if success then
+            Fail("The function should have thrown an error, but it did not." .. FormattedCallStack())
         end
     end
 
