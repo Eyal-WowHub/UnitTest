@@ -4,7 +4,7 @@ A library that offers an easy, efficient, and organized way to create, manage, a
 
 To run the tests, create a macro and paste the following script: `/run LibStub("UnitTest-1.0"):Run()`.
 
-#### Dependencies: [LibStub](https://www.curseforge.com/wow/addons/libstub), [Contracts](https://github.com/eyal-wow-addons/Contracts)
+#### Dependencies: [LibStub](https://www.curseforge.com/wow/addons/libstub), [Contracts](https://github.com/Eyal-WowHub/Contracts)
 
 ### Example:
 
